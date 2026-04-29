@@ -1,0 +1,2 @@
+mkdir: Creates a new folder/directory
+touch: Creates a new empty file

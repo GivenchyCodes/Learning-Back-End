@@ -1,0 +1,6 @@
+.bash_history
+.bash_logout
+DOM_API
+DOM_PPRACTICS
+javascript_practice
+.zsh_history

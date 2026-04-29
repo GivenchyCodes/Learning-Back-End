@@ -1,0 +1,82 @@
+/* style.css */
+body {
+    margin: 0;
+    height: 100vh;
+    /* Navy to Purple/Pink Gradient */
+    background: linear-gradient(135deg, #0D1126 0%, #B947B1 50%, #FF77B5 100%);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Cartoon Animations */
+.cartoon-container .cloud {
+    position: absolute;
+    font-size: 50px;
+    opacity: 0.6;
+    animation: float 10s infinite linear;
+}
+.cloud-1 { top: 10%; left: -100px; }
+.cloud-2 { top: 30%; left: -150px; animation-delay: 5s; }
+
+@keyframes float {
+    from { transform: translateX(-10vw); }
+    to { transform: translateX(110vw); }
+}
+
+/* Chat Box Styling */
+.chat-container {
+    width: 350px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.chat-header {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 15px 15px 0 0;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    color: white;
+}
+
+.chat-input-area {
+    display: flex;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 15px 15px;
+}
+
+input {
+    flex: 1;
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+}
+
+button {
+    background: #FF77B5;
+    border: none;
+    padding: 5px 15px;
+    margin-left: 5px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
