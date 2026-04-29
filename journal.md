@@ -202,3 +202,32 @@ The Three Stages:
 # Reflections
 
 The workflow felt a bit repetitive at first, but I can see how git diff is a lifesaver for catching mistakes before they are saved. I also tried git stash, which is perfect for when I'm in the middle of something but need to switch tasks quickly without losing progress.
+
+## i'm making a stash test
+
+**Stretch & Mastery:**
+
+1. Conventional Commits
+   This is a standard way of writing commit messages so that both humans and automated tools can understand what happened just by glancing at the history.
+
+- feat: A new feature for the user.
+- fix: A bug fix.
+- docs: Changes to documentation only (like a README).
+- style: Formatting changes (white-space, missing semi-colons) that don't affect the code's meaning.
+- refactor: Code changes that neither fix a bug nor add a feature (improving code structure).
+- perf: A code change that improves performance.
+- test: Adding missing tests or correcting existing ones.
+- chore: Maintenance tasks (updating dependencies, build scripts).
+
+2. Git Stash
+   Think of this as a "Save for Later" drawer. Sometimes you’re halfway through a change but need to switch branches or pull new code without committing your messy, unfinished work.
+   git stash: Takes your uncommitted changes and hides them away, making your directory "clean" (matching the last commit).
+   git stash pop: Grabs those changes out of the drawer and puts them back into your files so you can keep working.
+
+3. .gitignore Patterns
+   This file tells Git, "Ignore these files; never track them or upload them."
+   \*.log: The asterisk is a wildcard. This ignores any file ending in .log (e.g., error.log, server.log).
+   dist/: Ignores an entire folder named dist and everything inside it. This is usually where "built" or "compiled" code goes.
+   file vs. /file:
+   file: Ignores any file named "file" anywhere in your project (even deep in subfolders).
+   /file: Only ignores the file named "file" in the root (top-level) directory of your project
