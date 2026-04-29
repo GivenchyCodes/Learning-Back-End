@@ -26,7 +26,7 @@ The Three Stages:
 - Created a .gitignore file.
   using 'echo' to write the inside
 - Practiced the add → commit cycle multiple times.
-- Used git log to view my project's timeline.
+- Used git logs to view my project's timeline.
   Filtering Your Timeline
   If your project has many commits, use these filters to narrow down the timeline:
   By Author: git log --author="Givens".
