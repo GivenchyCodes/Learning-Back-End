@@ -1,0 +1,5 @@
+{"level":"info","message":"New user signed up"}
+{"level":"error","message":"Database connection failed!"}
+{"level":"info","message":"The application has started!"}
+{"level":"warn","message":"Heads up! Something looks a bit off."}
+{"level":"error","message":"System Failure: Could not connect to the database."}
