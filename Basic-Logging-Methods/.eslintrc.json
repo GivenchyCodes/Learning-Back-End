@@ -1,0 +1,6 @@
+// .eslintrc.json
+{
+  "rules": {
+    "no-console": "warn"
+  }
+}
