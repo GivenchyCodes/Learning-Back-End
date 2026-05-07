@@ -79,3 +79,7 @@ Every program works with data. Today covers the core building blocks: how JavaSc
 Upon successful completion of all checks and configurations, i will commit my workspace changes using the standardized convention:
 bash
 git commit -m "feat(day-06): variables, types, and operators exercises"
+
+# problem i faced
+
+i got stucked on the eslint standard, until i finally remembered i could use "&&" instead of "==". when i did, the flag went off.
