@@ -17,7 +17,7 @@ console.log(undefined + 5);
 console.log('5' === 5);
 
 // true - Loose equality (==) coerces the string '5' to number 5 before comparing.
-console.log('5' && 5);
+console.log('5' == 5);
 
 function isLooselyEqual(value1, value2) {
   // This will bypass the eslint
