@@ -48,3 +48,17 @@ A `while` loop that continues to generate random numbers until it matches a "tar
 - the truthy-falsy is complecated but the documentations suggest you disabble at this point.
 - i will continue tomorrow on the stretchery and mastery.
 - `day-07/guessing-game.js`: A simulation of a number-guessing game using a `while` loop. i will do this tomorrow
+
+## Day 07 PassOver
+
+- I finally figured it out on how to use while loop. i also stratched my code to have:
+  - An import method for prompt
+  - i create a start function for getBet() and it return getBet()
+  - i crated a method with a callback 'target': 'const target = Math.floor(Math.random() \* 10) + 1;'
+  - i also crated a 'while loop function with an argument input to flush with an attampts += 1 iteration: while (guess !== target) {
+    attempts += 1; }
+
+- The standard break statement only exits the innermost loop it is currently in. Using a labelled break is primarily useful in nested loops when you need to exit an outer loop from within an inner one: i will continue on it tomorrow with the code, i am still studying the resources.
+
+- I iterates from 1 to the limit, concatenating strings for multiples of 3 and 5.
+- The logs "Fizz", "Buzz", or "FizzBuzz" accordingly, returns to the number itself.
