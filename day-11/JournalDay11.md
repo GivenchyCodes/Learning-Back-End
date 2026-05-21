@@ -14,24 +14,6 @@ Welcome to the comprehensive JavaScript Core Fundamentals tracking repository. T
 
 Day 11 isolates the core behaviors of JavaScript's fundamental data container: the Object. Implementation tasks focus on property lifecycle manipulation (CRUD), engine execution flags, explicit memory separation, and standard object traversal patterns.
 
-## 💻 Implementation Reference (day-11/objects.js)
-
-// 1. Data Structure Baselineconst book = {
-title: "The Hobbit",
-author: "J.R.R. Tolkien",
-year: 1937,
-genres: ["Fantasy", "Adventure"],
-rating: 4.8
-};
-// 2. Dynamic Property Manipulation (CRUD)const addProperty = (obj, key, val) => { obj[key] = val; return obj; };const deleteProperty = (obj, key) => { delete obj[key]; return obj; };const updateProperty = (obj, key, val) => { if (key in obj) obj[key] = val; return obj; };
-// 3. Instance vs Prototype Resolution Verificationconst hasProperty = (obj, key) => ({
-hasIn: key in obj, // Evaluates direct & inherited properties
-hasOwn: Object.prototype.hasOwnProperty.call(obj, key) // Strict instance evaluation
-});
-// 4. Custom Accumulator-Based Object Compositionconst mergeObjects = (target, ...sources) => {
-return sources.reduce((acc, src) => ({ ...acc, ...src }), { ...target });
-};
-
 ## 🛠️ Deep Technical Deep Dives## 1. Prototype Traversal (in) vs Local Instance Flags (hasOwnProperty)
 
 - key in object: Instructs the JavaScript engine to sweep the immediate object's properties. If unpaid, it moves up the target's prototype chain (**proto**) recursively until hitting Object.prototype. Returns true if found anywhere on the lineage.
