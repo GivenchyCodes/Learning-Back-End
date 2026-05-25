@@ -1,24 +1,19 @@
-let ladder = {
+//
+const ladder = {
   step: 0,
   up() {
-    this.step = +1;
+    this.step += 1;
+    return this;
   },
   down() {
     this.step -= 1;
+    return this;
   },
-  showStep: function () {
-    // shows the current step
+  showStep() {
     console.log(this.step);
+    return this;
   },
 };
 
-// console.log
-console.log(
-  ladder
-    .up()
-    .ladder.up()
-    .ladder.down()
-    .ladder.showStep()
-    .ladder.down()
-    .ladder.showStep(),
-);
+// Execution example:
+ladder.up().up().down().showStep().down().showStep();
