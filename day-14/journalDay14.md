@@ -39,3 +39,11 @@ Demonstrates safe external resource lifecycle control. By leveraging the finally
 
 - Guaranteed Interception: The finally structural block runs even if early returns or catastrophic code crashes disrupt execution flows.
 - Leak Mitigation: Safely closes external resources, connections, or streams to free operational system memory.
+
+## Advance Error handling
+
+Setting up IDE:
+
+- Settime
+- CI-CD
+- PR

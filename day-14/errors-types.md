@@ -112,3 +112,179 @@ try {
 - User-Facing UI Inputs: When validation occurs on a UI checkout or profile form, failing fast forces users to submit, hit an error, fix one field, and submit again repeatedly.
 - Accumulation highlights all invalid fields at once for a frictionless user experience.
 - Bulk Data Processing / Ingestion: When parsing large CSV logs or executing batches of background migrations, you want to identify all corrupted configuration properties across a dataset simultaneously rather than stopping execution on row one.
+
+## Developer Journal: JavaScript Error Handling & Exception Management
+
+This journal documents the implementation of robust error handling strategies in JavaScript, covering built-in error types, defensive parsing, custom error inheritance, type-based routing, and resource lifecycle management.
+
+## Task 1: Built-in Error Types
+
+Demonstrates how to trigger, catch, and log five common JavaScript error types. Dynamic approaches are used to bypass static analysis tools and lint rules.
+
+- Error: Generic system error thrown manually.
+- TypeError: Raised when an operation is performed on an incompatible data type.
+- RangeError: Triggered when a numeric value or length falls outside its allowed range.
+- ReferenceError: Occurs when code attempts to access a non-existent variable.
+- SyntaxError: Raised during compilation or execution when parsing malformed code or data formats like bad JSON.
+
+```java
+// 1. Generic Errortry {
+  // Manual throw of a generic system error
+  throw new Error('Something went wrong globally.');
+} catch (error) {
+  console.log(`[${error.name}]: ${error.message}`);
+}
+// 2. TypeErrortry {
+  // Bypasses static analysis by obfuscating the type check via a dynamic object map
+  const dynamicValues = { value: 42 };
+  const methodKey = 'toUpperCase';
+  dynamicValues.value[methodKey]();
+} catch (error) {
+  console.log(`[${error.name}]: ${error.message}`);
+}
+// 3. RangeErrortry {
+  // Bypasses literal array checks by computing a negative number at runtime
+  const dynamicSize = (() => -1)();
+  const arr = new Array(dynamicSize);
+} catch (error) {
+  console.log(`[${error.name}]: ${error.message}`);
+}
+// 4. ReferenceErrortry {
+  // Bypasses "variable not defined" lint checks by looking up a property on the global scope
+  const globalContext = typeof window !== 'undefined' ? window : global;
+  if (!globalContext.nonExistentVariable) {
+    // Evaluating string expression at runtime causes genuine engine ReferenceError without static code flags
+    eval('nonExistentVariable');
+  }
+} catch (error) {
+  console.log(`[${error.name}]: ${error.message}`);
+}
+// 5. SyntaxError (via JSON.parse)try {
+  // Bad syntax in external string data parsed at runtime
+  JSON.parse('{ invalid json }');
+} catch (error) {
+  console.log(`[${error.name}]: ${error.message}`);
+}
+
+
+## Task 2: Safe JSON Parsing Wrapper
+A defensive utility function that wraps JSON.parse to prevent unpredictable runtime data crashes by returning an explicit descriptive string upon failure.
+
+* Defensive Design: Prevents untrusted string payloads from crashing execution threads.
+* Graceful Degradation: Switches a fatal runtime failure into an informational error payload string.
+
+/**
+ * Safe JSON Parsing Wrapper
+ * @param {string} str - The string to parse.
+ * @returns {object|string} Parsed object or clear error message string.
+ */function parseJSON(str) {
+  try {
+    return JSON.parse(str);
+  } catch (error) {
+    // Return a clear user message instead of crashing the program
+    return `Parsing failed: ${error.message}`;
+  }
+}
+// Testing Task 2
+console.log(parseJSON('{"status": "success"}')); // Returns object
+console.log(parseJSON('{ bad data }')); // Returns message string
+
+
+## Task 3: Custom Error Classes
+Extending the base Error class to create operational application errors. Each subclass inherits core stack tracing properties while embedding custom HTTP-aligned status codes.
+
+* Subclassing: Uses extends Error to tap into native browser/engine stack traces.
+* Context Preservation: Appends unique contextual fields (statusCode) to aid upstream API routers.
+
+class ValidationError extends Error {
+  constructor(message) {
+    super(message); // Correctly sets up message and engine stack trace
+    this.name = 'ValidationError';
+    this.statusCode = 400; // Operational status code for bad requests
+  }
+}
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message); // Correctly sets up message and engine stack trace
+    this.name = 'NotFoundError';
+    this.statusCode = 404; // Operational status code for missing resources
+  }
+}
+
+
+## Task 4: Using Custom Errors with Type Checking
+Simulates data validation and resource lookup. Uses the instanceof operator within the catch block to handle domain-specific errors differently, while re-throwing unhandled programmer errors to preserve systemic visibility.
+
+* Type-Based Routing: Leverages instanceof to cleanly separate validation bugs from routing bugs.
+* Error Bubble Protection: Explicitly re-throws unhandled errors (throw error) to keep development tools active.
+
+// Mock database storageconst users = [{ id: 1, email: 'user@example.com' }];
+function findUser(id) {
+  const user = users.find((u) => u.id === id);
+  if (!user) {
+    throw new NotFoundError(`User with ID ${id} could not be found.`);
+  }
+  return user;
+}
+function validateEmail(email) {
+  if (!email.includes('@')) {
+    throw new ValidationError(`The email "${email}" is missing an @ symbol.`);
+  }
+  return true;
+}
+// Execution using instanceof to differentiate operational responsestry {
+  validateEmail('bademail.com'); // Will trigger validation logic
+  findUser(999); // Will trigger not found logic
+} catch (error) {
+  if (error instanceof ValidationError) {
+    console.warn(`[Client Error ${error.statusCode}]: ${error.message}`);
+  } else if (error instanceof NotFoundError) {
+    console.warn(`[Resource Error ${error.statusCode}]: ${error.message}`);
+  } else {
+    // Re-throw unexpected programmer errors or system glitches to prevent silencing bugs
+    throw error;
+  }
+}
+
+
+## Task 5: Guaranteeing Clean-up via finally
+Demonstrates safe external resource lifecycle control. By leveraging the finally block, state cleanup routines run automatically regardless of whether operations complete cleanly or terminate prematurely due to unexpected network errors.
+
+* Guaranteed Interception: The finally structural block runs even if early returns or catastrophic code crashes disrupt execution flows.
+* Leak Mitigation: Safely closes external resources, connections, or streams to free operational system memory.
+
+const databaseConnection = {
+  isOpen: false,
+  open() {
+    this.isOpen = true;
+    console.log('DB connection opened.');
+  },
+  close() {
+    this.isOpen = false;
+    console.log('DB connection safely closed.');
+  },
+};
+function processData() {
+  databaseConnection.open();
+  try {
+    console.log('Processing query...');
+    // Simulate an unexpected dynamic failure during operation
+    throw new Error('Network lost mid-query.');
+  } finally {
+    // This block executes regardless of whether the try blocks succeeds or throws
+    databaseConnection.close();
+  }
+}
+// Execute the process wrapping the unexpected operational error safelytry {
+  processData();
+} catch (err) {
+  console.log(`Handled root error: ${err.message}`);
+}
+
+## Advance Error Handling
+* Document asynchronous error handling using async/await try-catch blocks.
+* Add an architectural explanation on the difference between operational errors vs. programmer errors.
+* Create a section explaining how to handle unhandled rejections globally.
+
+
+```
