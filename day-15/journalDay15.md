@@ -61,7 +61,7 @@ JavaScript handles multiple tasks concurrently by offloading slow, blocking task
 | +-------------------------------------------------------+ |
 +-------------------------------------------------------------+
 
-## 💻 Code Exercises## day-15/callbacks.js
+## day-15/callbacks.js
 
 This file implements asynchronous simulations and models the structural shift into callback hell.
 
@@ -73,7 +73,7 @@ This file implements asynchronous simulations and models the structural shift in
 Reading this code feels highly straining and mentally taxing.
 The logic crawls horizontally across the screen forming a deeply indented pyramid.
 Tracking variables across different scopes becomes tedious, and duplicating error-handling
-logic (`if (err)`) at every single level makes the file messy and prone to bugs.
+logic (`if (err)`) at every single level makes the file messy and prone to bugs and also flags by airbnb.
 
 ## day-15/event-loop.js
 
@@ -101,7 +101,7 @@ Promise.resolve().then(() => {
 console.log("Promise callback");
 });
 
-## Core Concept Self-Checks
+### Core Concept Self-Checks
 ## Quick Q&A
 - Why does the line after a setTimeout run before its callback?
   setTimeout is non-blocking. It registers with the runtime system and pops off the stack immediately so the main thread can continue.
