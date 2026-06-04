@@ -1,0 +1,5 @@
+Stretch 3: util.promisify Comparison
+Node's built-in util.
+promisify handles crucial configuration nuances that a basic utility misses:
+Multiple Arguments: A basic utility assumes callbacks look like (err, data). If a callback passes multiple success arguments (e.g., (err, val1, val2)), a home-grown wrapper only resolves with val1. Node handles this by converting the result into a neat object containing named keys.
+Custom Promisified Variants (Symbol.for('util.promisify.custom')): Many legacy Node modules have unique internal behaviors. Node allows functions to provide an explicit promise-based override using a special Symbol property. Node's util.promisify detects this key and returns the optimized variant instantly instead of forcing standard wrapper wrapping.
