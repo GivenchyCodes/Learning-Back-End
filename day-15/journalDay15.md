@@ -10,6 +10,8 @@
 
 ## This repository contains study notes, code implementations, and runtime architectural diagrams detailing how JavaScript handles asynchronous execution despite being a single-threaded runtime environment.
 
+Press <kbd>Ctrl</kbd> + <kbd>C</kbd> to copy.
+
 ## 🔑 Key Terms Reference
 
 - Thread: A single sequence of steps a program follows, one after another.
@@ -34,7 +36,7 @@
 
 ---
 
-## 🏗️ The Asynchronous Runtime Architecture
+## The Asynchronous Runtime Architecture
 
 JavaScript handles multiple tasks concurrently by offloading slow, blocking tasks to system-level Runtime APIs.
 
