@@ -1,0 +1,13 @@
+{
+  "name": "esm",
+  "version": "1.0.0",
+  "description": "Day 18 — Modules (CommonJS vs ES Modules)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "GivenchiCodes",
+  "license": "ISC",
+  "type": "module"
+}
