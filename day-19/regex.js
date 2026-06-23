@@ -32,7 +32,7 @@ console.log(
 ); // true false
 console.log(
   'Extract numbers:',
-  extractNumbers('Givencodes is 24 and has 3 tasks left.'),
+  extractNumbers('Givenchicodes is 24 and has 3 tasks left.'),
 ); // ['24', '3']
 console.log('ZIP tests:', isValidZip('90210'), isValidZip('abc12')); // true false
 console.log('Space clean:', singleDashSpaces('Alliance   Security      Guard')); // "Alliance-Security-Guard"
@@ -48,6 +48,6 @@ function slugify(text) {
 }
 
 // Test Task 5
-console.log('Slug 1:', slugify('Givencodes Portfolio!')); // "givencodes-portfolio"
+console.log('Slug 1:', slugify('Givenchicodes Portfolio!')); // "givenchicodes-portfolio"
 console.log('Slug 2:', slugify('  My Day 19 Blog Post...  ')); // "my-day-19-blog-post"
 console.log('Slug 3:', slugify('JavaScript & Regex: Age 24?')); // "javascript-regex-age-24"
