@@ -6,7 +6,7 @@ function deepCopy(obj) {
 // Test Task 1
 console.log('Task 1 DeepCopy');
 const originalUser = {
-  name: 'Givencodes',
+  name: 'Givenchicodes',
   age: 24,
   courses: ['Artificial Intelligent', 'Machine Learning'], // array braces
 };
@@ -39,7 +39,7 @@ function safeJSONParse(str) {
 }
 
 // Test Task 2
-console.log('Valid Parse:', safeJSONParse('{"name":"Givencodes","age":24}'));
+console.log('Valid Parse:', safeJSONParse('{"name":"Givenchicodes","age":24}'));
 // { data: { name: 'Givencodes', age: 24 }, error: null }
 
 console.log('Invalid Parse:', safeJSONParse('{ broken json }'));
