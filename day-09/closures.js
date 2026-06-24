@@ -50,10 +50,27 @@ console.log('\n TASK 5: ASYNCHRONOUS LOOP FIXES');
 */
 
 // Modern Solution: Use 'let' to bind a distinct 'i' per iteration block
-console.log("  Starting 'let' loop (kindly watch logs arrive in 100ms)");
+//console.log("  Starting 'var' loop (kindly watch logs arrive in 100ms)");
+///0xx0x0x0x0x00x
+
+for (var iterationVar = 0; iterationVar <= 6; iterationVar += 1) {
+  setTimeout(
+    () => console.log('    Fix (var) loop output:', iterationVar),
+    100,
+  );
+}
+
 for (let iterationLet = 0; iterationLet < 5; iterationLet += 1) {
   setTimeout(
     () => console.log('    Fix (let) loop output:', iterationLet),
     100,
   );
 }
+
+// for (var iterationVar = 0; iterationVar < 5; iterationVar += 1) {
+//   console.log('    Fix (var) loop output:', iterationVar);
+// }
+
+// for (let iterationLet = 0; iterationLet < 5; iterationLet += 1) {
+//   console.log('    Fix (let) loop output:', iterationLet);
+// }

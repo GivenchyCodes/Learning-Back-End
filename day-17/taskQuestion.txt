@@ -3,3 +3,5 @@ What an async function always returns: An async function always returns a Promis
 Using await to read a promise value: The await keyword halts execution inside the block until the promise finishes, unwrapping the payload value directly into your variable initialization (e.g., const data = await promise).
 Handling rejection with try/catch: When an awaited promise rejects, it throws its error payload exactly like a standard operational engine error. This triggers code execution to jump immediately to the local catch(error) block.
 Why code after an async call runs before it finishes: The await keyword only blocks code execution inside that specific async function wrapper. The outer main JavaScript execution loop passes the pending wrapper to the Event Loop engine and proceeds down the main script synchronously without blocking the whole thread. I have been noticing this statement since.
+
+

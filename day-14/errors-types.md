@@ -218,7 +218,8 @@ Simulates data validation and resource lookup. Uses the instanceof operator with
 * Type-Based Routing: Leverages instanceof to cleanly separate validation bugs from routing bugs.
 * Error Bubble Protection: Explicitly re-throws unhandled errors (throw error) to keep development tools active.
 
-// Mock database storageconst users = [{ id: 1, email: 'user@example.com' }];
+// Mock database storage
+const users = [{ id: 1, email: 'user@example.com' }];
 function findUser(id) {
   const user = users.find((u) => u.id === id);
   if (!user) {

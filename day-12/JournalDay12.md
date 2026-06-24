@@ -48,3 +48,61 @@ Key: stackable -> Value: true
 Optional Chaining & Nullish Coalescing
 Region: Global
 Timeout: 0
+
+# Mastery Journal: Day 12 — Modern JavaScript Features
+
+## 🎯 Target Mastery Goals
+
+- Write clean, expressive, and concise ES6+ JavaScript code.
+- Safely manipulate memory references using shallow copying syntax.
+- Manage unstructured function inputs and deeply nested data layouts without application runtime errors.
+
+---
+
+## 💡 Core Concepts Mastered
+
+### 1. Unpacking & Gathering (`...`)
+
+- **Spread Operator**: Evaluates array elements or object properties individually into new targets. It bypasses reference sharing to ensure unique data allocation.
+- **Rest Parameters**: Groups standalone functional parameters into a unified array instance. It replaces the legacy `arguments` object keyword.
+
+### 2. Template Strings
+
+- Backtick expressions (` `) remove manual string concatenation patterns using `+`.
+- They embed inline code evaluations directly via `${expression}` layout engines.
+- They retain source formatting line breaks natively without `\n` configurations.
+
+### 3. Structural Iteration
+
+- **`for...of`**: Enumerates collection **values** sequentially. Optimized for index-based iterable objects like Arrays.
+- **`for...in`**: Enumerates enumerable **keys/string labels**. Optimized for reading key-value metadata within Object literals.
+
+### 4. Resilient Evaluation Mechanics
+
+- **Optional Chaining (`?.`)**: Validates left-hand data definitions before parsing deeper child nodes. Returns `undefined` safely instead of throwing runtime errors.
+- **Nullish Coalescing (`??`)**: Short-circuits fallback expressions strictly when meeting `null` or `undefined` variants.
+- **Logical OR (`||`)**: Short-circuits fallback expressions against all falsy items, including legitimate data parameters like `0`, `false`, and `""`.
+
+---
+
+## 🛠️ Challenges & Solutions
+
+### The Falsy Overwrite Trap
+
+- **Roadblock**: Using `||` to map incoming application configurations accidentally overwrote zero-value settings (`0` or `""`) back to target factory defaults.
+- **Fix**: Migrated system logic dependencies over to `??` evaluation patterns. This guarantees that explicit user setups like `0` remain valid while absent markers (`null`) trigger appropriate system fallbacks.
+
+### Context Distinction for `...` Syntax
+
+- **Roadblock**: Visual confusion when analyzing identical punctuation scripts used for both unpacking data arrays and capturing operational variables.
+- **Fix**: Built a positional classification mental model. If `...` sits inside receiving assignments (variable capture/parameter declaration), it gathers data (**Rest**). If it sits inside executing expressions (function invocations/array creation), it unpacks data (**Spread**).
+
+---
+
+## 🚀 Practical Application
+
+I implemented these structural techniques to overhaul standard operations in `day-12/modern-js.js`:
+
+- Cleaned up nested item calculations by feeding list inputs straight into `Math.min(...spread)` routines.
+- Safeguarded API simulation profiles from null property crashes using deep path checks with `?.`.
+- Handled configuration setup priorities with object overrides: `{ ...defaults, ...userOverrides }`.

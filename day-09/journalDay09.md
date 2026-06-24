@@ -17,7 +17,7 @@ Welcome to Day 9 of the JavaScript curriculum and architectural patterns demonst
 text
 day-09/
 ├── all-tasks.js # Master script containing all tasks, fixes, and stretch goals.
-└── README.md # Documentation and concept analysis.
+└── JournalDay09.md # Documentation and concept analysis.
 
 ## 🛠️ Code Implementations & Core Concepts
 

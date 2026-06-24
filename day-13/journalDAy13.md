@@ -22,6 +22,121 @@ console.log(`Thus, Does the prototype own 'speak'? ${prototypeHasit}`); // it wi
 
 sir, Because of time, i could only do task 1.
 
+** Continue from yesterdays tasks **
+
+# Journal: Object-Oriented JavaScript & Web Components
+
+## Task 1: Managing 'this' Context
+
+- **Problem**: Execution context is stripped when a method is assigned to a variable, causing `this` to become undefined.
+- **Fix 1**: Use `.bind(object)` to permanently lock the context to the target instance.
+- **Fix 2**: Wrap the call in an arrow function to lexically inherit `this` from the outer scope.
+
+## Task 2: Class Syntax Conversion
+
+- **Action**: Converted factory/prototype patterns into clean ES6 `class` definitions.
+- **Key Concept**: Methods inside the class body automatically attach to `Class.prototype` without needing comma separators.
+- **Feature**: Integrated native getter properties (`get loudLabel`) to compute formatted values dynamically without invocation parentheses.
+
+## Task 3: Subclassing & Inheritance
+
+- **Action**: Created a `Dog` class that inherits properties and methods from `Animal` using the `extends` keyword.
+- **Pitfall**: Attempting to reference `this` before invocation of `super()` crashes the runtime.
+- **Fix**: Always call `super(arguments)` first inside the constructor to instantiate the parent context.
+
+## Task 4: Factory Creation with Static Methods
+
+- **Action**: Implemented utility methods directly on the class constructor rather than its instances using the `static` keyword.
+- **Use Case**: Created a data-parsing factory method (`fromObject`) that converts plain JSON objects into structured class instances.
+
+---
+
+## Complete Verified JavaScript Implementation
+
+```javascript // i had to use the ignore for mulitple classes being flagged by my IDE setup.
+/* eslint-disable */
+// sonarjs:disable-next-line
+// nosonar
+
+// TASKS 2, 3, & 4: CLASSES & INHERITANCE
+
+// Task 2: Animal Class Definition
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    return `Hello, my name is ${this.name}.`;
+  }
+
+  get loudLabel() {
+    return `ANIMAL: ${this.name.toUpperCase()}`;
+  }
+
+  // Task 4: Static Factory Method
+  static fromObject(data) {
+    return new Animal(data.name);
+  }
+}
+
+// Confirming Task 2 behavior
+const cat = new Animal('WorkShopCat');
+console.log(cat.speak()); // Output: Hello, my name is WorkShopCat.
+console.log(cat.loudLabel); // Output: ANIMAL: WORKSHOPCAT
+
+// Task 3: Subclassing with Dog
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name); // Pitfall Fix: Must call super() before using 'this'
+    this.breed = breed;
+  }
+
+  bark() {
+    return `${this.name} says Woof!`;
+  }
+}
+
+// Verify Dog inheritance
+const myDog = new Dog('Catcher', 'Road Wildler');
+console.log(myDog.speak()); // Output: Hello, my name is Catcher.
+console.log(myDog.bark()); // Output: Catcher says Woof!
+
+// Verify Task 4 Static Method
+const builtFromObj = Animal.fromObject({ name: 'Marlo' });
+console.log(builtFromObj.speak()); // Output: Hello, my name is Marlo.
+
+// TASK 1: PROTOTYPES & 'THIS' CONTEXT
+
+function LegacyAnimal(name) {
+  this.name = name;
+}
+LegacyAnimal.prototype.speak = function () {
+  return `Hello, my name is ${this.name}.`;
+};
+
+const mouse = new LegacyAnimal('Jerry');
+
+// 1. Standard Method Invocation
+console.log(mouse.speak()); // Output: Hello, my name is Jerry.
+
+// 2. Context Loss Pitfall
+const looseSpeak = mouse.speak;
+try {
+  console.log(looseSpeak());
+} catch (error) {
+  console.log("Error caught: 'this' context is lost!");
+}
+
+// FIX 1: Explicit Binding
+const fixedWithBind = mouse.speak.bind(mouse);
+console.log(fixedWithBind()); // Output: Hello, my name is Jerry.
+
+// FIX 2: Lexical Arrow Function Wrapper
+const fixedWithArrow = () => mouse.speak();
+console.log(fixedWithArrow()); // Output: Hello, my name is Jerry.
+```
+
 ## Key terms
 
 - Prototype: the hidden object an object falls back to when a property is missing.

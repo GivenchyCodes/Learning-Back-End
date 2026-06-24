@@ -1,19 +1,19 @@
 ## Day 17: Async/Await Exercise
 
-Today's practical guide and implementation demonstrating the transition from Promise chains `(.then()/.catch())` to modern asynchronous JavaScript using `async and await`.
+Today's practicals for demonstrating the transition from Promise chains `(.then()/.catch())` to modern asynchronous JavaScript using `async and await`.
 
-## 📌 Project Overview
+## Project Overview
 
-Today's day-17 lessons contains implementation examples for mastering asynchronous JavaScript control flow. It showcases how to write `flatter, cleaner, and more readable code using async/await syntax, manage errors effectively using standard native structures, and optimize script performance through concurrent execution models`.
+Today's day-17 lessons contains test for mastering asynchronous JavaScript control flow. It showcases how to write `flatter, cleaner, and more readable code using async/await syntax, manage errors effectively using standard native structures, and optimize script performance through concurrent execution models`.
 
-## 🚀 Key Features
+## Key Features
 
 - `Linear Control Flow`: Flattened Promise-based file system pipelines without nesting.
 - `Dual Error Paradigms`: Complete verification of internal scoped try/catch execution vs external unhandled rejection bubble hooks.
 - `Performance Benchmarking`: Direct performance comparison measuring the wall-clock execution difference between sequential operations and concurrent operations (Promise.all).
 - `Non-Blocking Delays`: Implementation of a reusable promise-driven utility function to pause execution environments.
 
-## 🛠️ Code Structure & Tasks Covered
+## Code Structure & Tasks Covered
 
 ## Task 1: Promise Chain Architecture Migration
 

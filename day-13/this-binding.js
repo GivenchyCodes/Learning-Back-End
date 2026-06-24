@@ -19,12 +19,12 @@ try {
   // This fails (or prints undefined) because JavaScript evaluates this globally or as undefined in strict mode
   console.log(looseSpeak());
 } catch (error) {
-  console.log("Error caught: 'this' is lost!");
+  console.log("Error caught: 'this mouse name Jerry' is lost!");
 }
 
 // FIX 1: Using .bind()
 // Why it works: .bind() creates a brand new function wrapper and permanently
-// locks its internal 'this' keyword to whatever object you pass in (duck).
+// locks its internal 'this' keyword to whatever object you pass in (mouse).
 const fixedWithBind = mouse.speak.bind(mouse);
 console.log(fixedWithBind()); // Output: Hello, my name is Jerry.
 

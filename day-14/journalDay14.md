@@ -1,4 +1,4 @@
-## Day-14 Journal: JavaScript Error Handling
+##
 
 ## This journal documents the implementation of robust error handling strategies in JavaScript, covering built-in error types, defensive parsing, custom error inheritance, type-based routing, and resource lifecycle management.
 

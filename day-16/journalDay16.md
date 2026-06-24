@@ -63,7 +63,7 @@ readFilePromise('config.json')
 
 ## Self-Check Answers
 
-- **Fulfillment vs. Settled:** Fulfilled means success. Settled means finished (either success or failure).
+- **Fulfillment vs. Settled:** Fulfilled means success. Settled means finished (either `success` or `failure`).
 - **Waiting Chains:** Returning a promise from a `.then()` handler tells the JavaScript engine to pause the next chain steps until that specific promise resolves.
 - **Early Rejection:** If step 1 fails in a 5-step chain, steps 2 through 5 are completely skipped, and execution jumps straight to the closest `.catch()`.
 - **Gathering All Network Results:** Use `Promise.allSettled` because it never stops early for failures and collects data from both successful and broken requests.

@@ -66,6 +66,15 @@ for (const price of itemPrices) {
 for (const key in itemManifest) {
   console.log(`Key: ${key} -> Value: ${itemManifest[key]}`);
 }
+// Fix for the first loop (for...of)
+// itemPrices.forEach((price) => {
+//   console.log(`Price: ${price}`);
+// });
+
+// // Fix for the second loop (for...in)
+// Object.entries(itemManifest).forEach(([key, value]) => {
+//   console.log(`Key: ${key} -> Value: ${value}`);
+// });
 
 // 5 & 6. Optional Chaining (?.) & Nullish Coalescing (??)
 // ?. halts execution and outputs undefined instead of crashing if a nested property is missing.
@@ -81,5 +90,5 @@ const region = serverResponse.location?.region ?? 'Global';
 const globalTimeout = serverResponse.preferences?.timeout ?? 5000;
 
 console.log('\n Optional Chaining & Nullish Coalescing');
-console.log('Region:', region); // 'Global' (safely defaulted because location is undefined)
-console.log('Timeout:', globalTimeout); // 0 (safely preserved because 0 is a valid non-nullish value)
+console.log('\n Region:', region); // 'Global' (safely defaulted because location is undefined)
+console.log('\n Timeout:', globalTimeout); // 0 (safely preserved because 0 is a valid non-nullish value)
