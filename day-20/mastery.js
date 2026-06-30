@@ -46,6 +46,8 @@ console.log('\n2. Fibonacci Generator Number');
 
 // The asterisk (*) defines a Generator function
 function* fibonacciGenerator() {
+  // Calling this function does not run the code inside.
+  //Code only executes when you call the .next() method.
   let current = 0;
   let nextNum = 1;
 

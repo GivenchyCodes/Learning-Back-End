@@ -57,7 +57,7 @@ console.log('Task 2 - Intersection:', getIntersection([1, 2, 3], [2, 3, 4])); //
 const countWords = (text) => {
   const wordMap = new Map();
   // Normalize text: lowercase and split by spaces/whitespace
-  const words = text.toLowerCase().match(/\b\w+\b/g) || [];
+  const words = text.toLowerCase().match(/\b\w+\b/g) || []; // day 19 study
 
   // for (const word of words) {
   //   const currentCount = wordMap.get(word) || 0;
@@ -79,7 +79,7 @@ console.log("Task 3 - Count for 'fun':", countedWords.get('fun')); // Output: 1
 
 // Task 4: Simple Cache with WeakMap
 
-const processCache = new WeakMap();
+const processCache = new WeakMap(); // are cached
 
 const getComputedResult = (objKey) => {
   // If the result is already cached, return it immediately
