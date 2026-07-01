@@ -21,7 +21,7 @@ export async function addTask(description) {
   // Check if the description parameter is missing or consists only of empty spaces
   if (!description || !description.trim()) {
     // Print an error message directly to the standard error stream
-    console.error('Error: Task description cannot be empty.');
+    console.error('Error: Givens said Task description cannot be empty.');
     // Terminate the Node process early with a failure exit code of 1
     process.exit(1);
   }
@@ -45,7 +45,7 @@ export async function addTask(description) {
   // Commit the updated task array back to the local database file
   await saveTasks(tasks);
   // Print a confirmation message to the user showing their new task's ID
-  console.log(`Task added successfully (ID: ${newTask.id})`);
+  console.log(`Givens Said your Task added successfully (ID: ${newTask.id})`);
 }
 
 /**
@@ -62,7 +62,7 @@ export async function deleteTask(id) {
   // If the length of the array did not decrease, the target ID does not exist
   if (filteredTasks.length === initialLength) {
     // Output a target-not-found error message to the user
-    console.error(`Error: Task with ID ${id} not found.`);
+    console.error(`Error: Givens said Task with ID ${id} not found.`);
     // Quit application execution with an error status code
     process.exit(1);
   }

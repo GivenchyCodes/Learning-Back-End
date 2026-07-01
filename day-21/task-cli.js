@@ -57,7 +57,7 @@ async function main() {
       // Check if parsing failed to generate a valid matching mathematical integer number
       if (isNaN(id)) {
         // Log an analytical parameter type error alert directly to standard error
-        console.error('Error: Task ID must be a valid number.');
+        console.error('Error: Givens said Task ID must be a valid number.');
         // Terminate process loop operations explicitly with an input error state status
         process.exit(1);
       }
@@ -78,7 +78,7 @@ async function main() {
     // Fallback block executing automatically when matching command configurations cannot be located
     default:
       // Construct an unrecognized routing path notification alerting the terminal console logs
-      console.error(`Error: Unknown command "${command}"`);
+      console.error(`Error: Givens said Unknown command "${command}"`);
       // Print command structural options maps allowing users to evaluate structural configuration maps
       printHelp();
       // Halt execution routines completely providing an invalid action state exit notice code
