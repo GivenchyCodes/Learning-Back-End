@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": 1,
+    "description": "Finish Day 21 backend milestone",
+    "status": "todo",
+    "createdAt": "2026-07-01T12:57:39.274Z",
+    "updatedAt": "2026-07-01T12:57:39.274Z"
+  },
+  {
+    "id": 2,
+    "description": "Review JavaScript ES Modules",
+    "status": "todo",
+    "createdAt": "2026-07-01T13:01:54.034Z",
+    "updatedAt": "2026-07-01T13:01:54.034Z"
+  }
+]

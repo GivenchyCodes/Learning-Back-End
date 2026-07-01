@@ -12,3 +12,9 @@
   1. `addTask`
   2. `listTasks`
   3. `deleteTask`
+
+## File Path
+
+Storage.js
+
+- To locate the tasks.json where it saves the data, run: node -e "import path from 'path'; console.log(path.join(process.cwd(), 'tasks.json'))"
