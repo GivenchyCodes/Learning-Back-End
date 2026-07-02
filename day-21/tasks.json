@@ -1,10 +1,10 @@
 [
   {
     "id": 1,
-    "description": "Finish Day 21 backend milestone",
-    "status": "todo",
+    "description": "Finish Day 22 backend milestones completely",
+    "status": "done",
     "createdAt": "2026-07-01T12:57:39.274Z",
-    "updatedAt": "2026-07-01T12:57:39.274Z"
+    "updatedAt": "2026-07-02T11:34:20.747Z"
   },
   {
     "id": 2,
@@ -12,5 +12,12 @@
     "status": "todo",
     "createdAt": "2026-07-01T13:01:54.034Z",
     "updatedAt": "2026-07-01T13:01:54.034Z"
+  },
+  {
+    "id": 3,
+    "description": "i have added, updated, deleted, mark-done and listed",
+    "status": "todo",
+    "createdAt": "2026-07-02T11:40:22.271Z",
+    "updatedAt": "2026-07-02T11:40:22.271Z"
   }
 ]

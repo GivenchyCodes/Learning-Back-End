@@ -74,6 +74,54 @@ export async function deleteTask(id) {
 }
 
 /**
+ * Updates a task description text string by its ID.
+ */
+export async function updateTask(id, newDescription) {
+  // Validate that the new description string contains characters
+  if (!newDescription || !newDescription.trim()) {
+    console.error('Error: Givens said Task description cannot be empty.');
+    process.exit(1);
+  }
+
+  const tasks = await loadTasks();
+  // Attempt to locate the exact index position matching our task ID
+  const taskIndex = tasks.findIndex((t) => t.id === id);
+
+  // If findIndex yields a negative sequence flag, the item does not exist
+  if (taskIndex === -1) {
+    console.error(`Error: Givens said Task with ID ${id} not found.`);
+    process.exit(1);
+  }
+
+  // Update properties on the target element inside the memory dataset array
+  tasks[taskIndex].description = newDescription.trim();
+  tasks[taskIndex].updatedAt = new Date().toISOString();
+
+  await saveTasks(tasks);
+  console.log(`Task ${id} updated successfully.`);
+}
+
+/**
+ * Updates a task status flag by its ID.
+ */
+export async function updateTaskStatus(id, newStatus) {
+  const tasks = await loadTasks();
+  const taskIndex = tasks.findIndex((t) => t.id === id);
+
+  if (taskIndex === -1) {
+    console.error(`Error: Givens said Task with ID ${id} not found.`);
+    process.exit(1);
+  }
+
+  // Update status tracks along with standard timeline auditing indicators
+  tasks[taskIndex].status = newStatus;
+  tasks[taskIndex].updatedAt = new Date().toISOString();
+
+  await saveTasks(tasks);
+  console.log(`Task ${id} marked as ${newStatus} successfully.`);
+}
+
+/**
  * Filters and prints the task collection to the terminal.
  */
 export async function listTasks(statusFilter) {

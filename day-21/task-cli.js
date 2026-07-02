@@ -1,95 +1,174 @@
 #!/usr/bin/env node
-// Import the core business logic functions from our local task manager engine module
-import { addTask, deleteTask, listTasks } from './taskManager';
+// Identifies the interpreter path environment for executing this script via Node.js
+
+import {
+  addTask,
+  deleteTask,
+  listTasks,
+  updateTask,
+  updateTaskStatus,
+} from './taskManager.mjs';
+// Imports the complete set of asynchronous task operations from the local module file
 
 /**
  * Outputs a command dictionary usage helper text guide block to the screen.
  */
 function printHelp() {
-  // Print usage banner layout
+  // Declares the utility function responsible for printing application instructions
   console.log('Usage: task-cli <command> [arguments]');
-  // Print command categories visual spacer line break
+  // Outputs the primary command-line execution syntax template layout structure
   console.log('\nCommands:');
-  // Log usage configuration instruction syntax string for creating items
+  // Prints a clean visual break header section grouping command options
   console.log('  add "<description>"             Add a new task');
-  // Log syntax instruction configuration string for removing target elements
+  // Logs the syntax configuration blueprint for generating a new item
+  console.log(
+    '  update <id> "<description>"     Update an existing task description',
+  );
+  // Logs the syntax structural blueprint for rewriting existing description records
   console.log('  delete <id>                     Delete a task');
-  // Log syntax instruction layout for global listing output strings
+  // Logs the syntax format layout configuration for destroying existing records
+  console.log(
+    '  mark-in-progress <id>           Mark task state to running status',
+  );
+  // Logs the option flag mapping pattern used to toggle in-progress states
+  console.log(
+    '  mark-done <id>                  Mark task state to completed status',
+  );
+  // Logs the option flag mapping pattern used to toggle finished states
   console.log('  list                            List all tasks');
-  // Log syntax instruction layout for filtering pending tasks
+  // Logs the standard command format utilized to render all records
   console.log('  list todo                       List todo tasks');
-  // Log syntax instruction layout for filtering running operations
+  // Logs the configuration standard utilized to render pending item categories
   console.log('  list in-progress                List in-progress tasks');
-  // Log syntax instruction layout for filtering finished tasks
+  // Logs the configuration standard utilized to render active items tracking
   console.log('  list done                       List completed tasks');
+  // Logs the configuration standard utilized to render finalized items tracking
 }
+// Concludes the definitions block mapping out helper manual text strings
 
 /**
  * Main application runner orchestration method.
  */
 async function main() {
-  // Capture inputs while discarding node binary and script path components
+  // Declares the main asynchronous application engine controller execution pathway
   const args = process.argv.slice(2);
-  // Evaluate if the user failed to supply arguments to the app run execution
+  // Extracts execution variables while stripping terminal runtime binary system locations
   if (args.length === 0) {
-    // Display the guidance syntax helper options text block to the user
+    // Evaluates if the user failed to provide any action command
     printHelp();
-    // Drop terminal runtime execution with an invalid argument failure state
+    // Triggers the help presentation menu script printing instructions to terminal
     process.exit(1);
+    // Halts active application run loops while throwing an error status
   }
+  // Closes the evaluation loop handling empty application user input failures
 
-  // Isolate the core application operation parameter and force lowercase consistency
   const command = args[0].toLowerCase();
+  // Isolates the primary action routing phrase normalized completely to lowercase
 
-  // Run routing switches mapping process command strings to specific controllers
   switch (command) {
-    // Match logic branch for item entry insertions
+    // Initializes the programmatic branching structure to process input routing flags
     case 'add': {
-      // Execute the module creation function passing along the target string argument
+      // Matches the execution flow block when inserting a new task
       await addTask(args[1]);
-      // Exit out of the evaluation engine switch structure
+      // Dispatches downstream text content payload variables to persistence engine methods
       break;
     }
-    // Match logic branch for records deletion requests
-    case 'delete': {
-      // Parse the second argument value directly into an integer number data type
+    // Finalizes the tracking block mapping the item registration routines
+    case 'update': {
+      // Matches the execution flow block when altering existing descriptions
       const id = parseInt(args[1], 10);
-      // Check if parsing failed to generate a valid matching mathematical integer number
+      // Parses the base-10 numerical target value from arguments array slots
       if (isNaN(id)) {
-        // Log an analytical parameter type error alert directly to standard error
+        // Evaluates whether the system parsed an invalid non-numerical identity match
         console.error('Error: Givens said Task ID must be a valid number.');
-        // Terminate process loop operations explicitly with an input error state status
+        // Directs a formatted error string straight onto standard error logs
         process.exit(1);
+        // Safely terminates the script runtime loop tracking input error states
       }
-      // Trigger the background array element destruction engine module function
+      // Terminates the error prevention filtering block evaluating user numerical typing
+      await updateTask(id, args[2]);
+      // Transmits verified identity keys and description string update data parameters
+      break;
+    }
+    // Finalizes the routing path management block handling text updates
+    case 'delete': {
+      // Matches the execution flow block when purging records out right
+      const id = parseInt(args[1], 10);
+      // Extracts target database index values safely as mathematical integer symbols
+      if (isNaN(id)) {
+        // Double-checks that targeted system query identity parameters resolve to numbers
+        console.error('Error: Givens said Task ID must be a valid number.');
+        // Writes clear contextual notifications directly tracking invalid target entries
+        process.exit(1);
+        // Drops terminal processing structures explicitly using common error response tags
+      }
+      // Closes validation checking sequences guarding database item removal operations
       await deleteTask(id);
-      // Exit out of the evaluation engine switch structure
+      // Commences background array record purging logic via external module scripts
       break;
     }
-    // Match evaluation branch managing standard list query filters
+    // Finalizes execution workflow rules dealing with target array element destruction
+    case 'mark-in-progress': {
+      // Matches the execution flow block for updating statuses to running
+      const id = parseInt(args[1], 10);
+      // Decodes positional parameter text tokens into standard base-10 integer references
+      if (isNaN(id)) {
+        // Inspects values to certify identity indexes represent real calculable numbers
+        console.error('Error: Givens said Task ID must be a valid number.');
+        // Provides descriptive operational context tracking error events on systemic logs
+        process.exit(1);
+        // Exits ongoing node environment executions explicitly marking an entry failure
+      }
+      // Terminates logic filters validation routines guarding status update tracking processes
+      await updateTaskStatus(id, 'in-progress');
+      // Commits updated active lifecycle tracking updates through core logic modules
+      break;
+    }
+    // Finalizes processing logic parameters guiding operational tasks status transitionings
+    case 'mark-done': {
+      // Matches the execution flow block for updating statuses to finished
+      const id = parseInt(args[1], 10);
+      // Evaluates positional argument components into numeric system references safely
+      if (isNaN(id)) {
+        // Assesses if numerical parsing routines returned non-numeric calculation results instead
+        console.error('Error: Givens said Task ID must be a valid number.');
+        // Outputs standard syntax failure messages out over tracking console layers
+        process.exit(1);
+        // Instructs operational environments to execute termination sequences under faults
+      }
+      // Concludes parameter error check validations processing entry target references safely
+      await updateTaskStatus(id, 'done');
+      // Dispatches complete state change operations explicitly matching localized rulesets
+      break;
+    }
+    // Finalizes lifecycle configuration processing pipelines monitoring closed item actions
     case 'list': {
-      // Isolate optional secondary state constraint parameters and format to lowercase strings safely
+      // Matches the execution flow block managing database display querying filters
       const statusFilter = args[1] ? args[1].toLowerCase() : null;
-      // Pipeline downstream dataset array parameters to list formatting printing scripts
+      // Captures state constraints formatting strings to lowercase safely if present
       await listTasks(statusFilter);
-      // Exit out of the evaluation engine switch structure
+      // Pipelines array processing configurations along toward print management scripts
       break;
     }
-    // Fallback block executing automatically when matching command configurations cannot be located
+    // Finalizes visualization display workflows tracking database table print structures
     default:
-      // Construct an unrecognized routing path notification alerting the terminal console logs
+      // Fallback route handling unrecognized inputs that match no known command
       console.error(`Error: Givens said Unknown command "${command}"`);
-      // Print command structural options maps allowing users to evaluate structural configuration maps
+      // Emits standard warnings notifying terminal logs of invalid operation parameters
       printHelp();
-      // Halt execution routines completely providing an invalid action state exit notice code
+      // Displays structural application guide sheets allowing immediate command adjustments
       process.exit(1);
+    // Halts background logic engines tracking execution context route mismatches
   }
+  // Finalizes the control routing switch parsing execution parameter array tokens
 }
+// Concludes the primary asynchronous orchestrator wrapper framework setup actions
 
-// Invoke the main engine loop capturing unexpected background runtime execution pipeline errors
 main().catch((err) => {
-  // Route system tracking exceptions directly outward onto the system errors logging interface
+  // Triggers main execution tracks catching global runtime processing pipeline drops
   console.error('Unexpected error tracking failure context loop state:', err);
-  // Kill processing workflows dropping state context flags using critical execution crash tracking codes
+  // Routes global exception breakdowns safely out onto tracking systems log layers
   process.exit(1);
+  // Safely crashes environmental instances applying critical application crash alert standards
 });
+// Closes out program setup parameters running code safely under global catches
