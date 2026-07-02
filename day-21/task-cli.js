@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Import the core business logic functions from our local task manager engine module
-import { addTask, deleteTask, listTasks } from './taskManager.mjs';
+import { addTask, deleteTask, listTasks } from './taskManager';
 
 /**
  * Outputs a command dictionary usage helper text guide block to the screen.
