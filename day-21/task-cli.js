@@ -7,6 +7,8 @@ import {
   listTasks,
   updateTask,
   updateTaskStatus,
+  searchTasks,
+  printStats,
 } from './taskManager.mjs';
 // Imports the complete set of asynchronous task operations from the local module file
 
@@ -19,8 +21,10 @@ function printHelp() {
   // Outputs the primary command-line execution syntax template layout structure
   console.log('\nCommands:');
   // Prints a clean visual break header section grouping command options
-  console.log('  add "<description>"             Add a new task');
-  // Logs the syntax configuration blueprint for generating a new item
+  console.log(
+    '  add "<description>" [YYYY-MM-DD] Add a new task (Optional due date)',
+  );
+  // Logs the syntax configuration blueprint for generating a new item with an optional deadline
   console.log(
     '  update <id> "<description>"     Update an existing task description',
   );
@@ -43,6 +47,14 @@ function printHelp() {
   // Logs the configuration standard utilized to render active items tracking
   console.log('  list done                       List completed tasks');
   // Logs the configuration standard utilized to render finalized items tracking
+  console.log(
+    '  search "<keyword>"              Search for tasks targeting words',
+  );
+  // Logs the configuration standard utilized to look up tasks by descriptions
+  console.log(
+    '  stats                           Display analytical performance metrics',
+  );
+  // Logs the configuration standard utilized to render runtime execution calculations
 }
 // Concludes the definitions block mapping out helper manual text strings
 
@@ -69,8 +81,8 @@ async function main() {
     // Initializes the programmatic branching structure to process input routing flags
     case 'add': {
       // Matches the execution flow block when inserting a new task
-      await addTask(args[1]);
-      // Dispatches downstream text content payload variables to persistence engine methods
+      await addTask(args[1], args[2]);
+      // Dispatches text content and optional due dates toward persistence engines
       break;
     }
     // Finalizes the tracking block mapping the item registration routines
@@ -151,6 +163,30 @@ async function main() {
       break;
     }
     // Finalizes visualization display workflows tracking database table print structures
+    case 'search': {
+      // Matches the execution flow block tracking substring keyword searches
+      const keyword = args[1];
+      // Captures the raw keyword positional search parameter text safely
+      if (!keyword || !keyword.trim()) {
+        // Blocks blank or omitted search sequences from crashing downstream engines
+        console.error('Error: Please provide a valid keyword to search.');
+        // Outputs clean structural error warnings explicitly onto logs
+        process.exit(1);
+        // Terminates script executions safely tracking unfulfilled parameters
+      }
+      // Concludes structural verification checkpoints protecting search run operations
+      await searchTasks(keyword.trim());
+      // Commences core matching sequences matching filtered text records
+      break;
+    }
+    // Finalizes workflow logic controlling keyword search parameters routing
+    case 'stats': {
+      // Matches the execution flow block calling absolute analytical indicators
+      await printStats();
+      // Runs calculations rendering structural tracking percentage ratios
+      break;
+    }
+    // Finalizes performance visualization processing pathways on local run terminals
     default:
       // Fallback route handling unrecognized inputs that match no known command
       console.error(`Error: Givens said Unknown command "${command}"`);
@@ -162,13 +198,12 @@ async function main() {
   }
   // Finalizes the control routing switch parsing execution parameter array tokens
 }
-// Concludes the primary asynchronous orchestrator wrapper framework setup actions
 
+// Concludes the primary asynchronous orchestrator wrapper framework setup actions
 main().catch((err) => {
   // Triggers main execution tracks catching global runtime processing pipeline drops
   console.error('Unexpected error tracking failure context loop state:', err);
-  // Routes global exception breakdowns safely out onto tracking systems log layers
+  // // Routes global exception breakdowns safely out onto tracking systems log layers
   process.exit(1);
   // Safely crashes environmental instances applying critical application crash alert standards
-});
-// Closes out program setup parameters running code safely under global catches
+}); // Closes out program setup parameters running code safely under global catches
