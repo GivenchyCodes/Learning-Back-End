@@ -4,7 +4,10 @@ import fs from 'fs/promises';
 import path from 'path';
 
 // Combine the current working directory path with the target database name to create an absolute path
-const FILE_PATH = path.join(process.cwd(), 'tasks.json');
+const FILE_PATH = path.join(
+  process.cwd(),
+  process.env.NODE_ENV === 'test' ? 'tasks.test.json' : 'tasks.json',
+);
 
 /**
  * Ensures the JSON database file exists before reading.
