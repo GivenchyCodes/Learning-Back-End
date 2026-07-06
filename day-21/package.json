@@ -4,5 +4,9 @@
   "type": "module",
   "bin": {
     "task-cli": "./task-cli.js"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^2.1.0",
+    "eslint-config-prettier": "^10.1.8"
   }
 }

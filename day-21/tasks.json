@@ -27,5 +27,23 @@
     "createdAt": "2026-07-05T11:07:27.834Z",
     "updatedAt": "2026-07-05T11:07:27.834Z",
     "dueDate": "2026-07-01"
+  },
+  {
+    "id": 1783347250286,
+    "title": "Fix API Routing",
+    "completed": false
+  },
+  {
+    "id": 1783347570449,
+    "title": "Fix API Routing",
+    "completed": false
+  },
+  {
+    "id": 1783347570450,
+    "description": "Verify web server endpoints",
+    "status": "todo",
+    "createdAt": "2026-07-06T14:58:23.634Z",
+    "updatedAt": "2026-07-06T14:58:23.634Z",
+    "dueDate": "2026-12-31"
   }
 ]

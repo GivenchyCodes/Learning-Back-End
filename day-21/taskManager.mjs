@@ -50,8 +50,9 @@ function isTaskOverdue(task) {
  */
 function formatStatusColor(status) {
   if (status === 'todo') return `${COLORS.red}todo${COLORS.reset}`;
-  if (status === 'in-progress')
+  if (status === 'in-progress') {
     return `${COLORS.yellow}in-progress${COLORS.reset}`;
+  }
   if (status === 'done') return `${COLORS.green}done${COLORS.reset}`;
   return status;
 }
@@ -59,13 +60,14 @@ function formatStatusColor(status) {
 /**
  * Standardized grid display printer logic utilized across list and search pathways.
  */
-function printTaskGrid(tasks) {
-  // Draw table header columns using padding spacing methods to make it scannable, expanding to handle deadlines
-  console.log(
-    `${'ID'.padEnd(5)} ${'Status'.padEnd(15)} ${'Due Date'.padEnd(12)} ${'Created At'.padEnd(20)} Description`,
+export function printTaskGrid(tasks) {
+  // Draw table header columns using padding spacing methods to make it scannable
+  process.stdout.write(
+    `${'ID'.padEnd(5)} ${'Status'.padEnd(15)} ${'Due Date'.padEnd(12)} ${'Created At'.padEnd(20)} Description\n`,
   );
   // Draw a clean dividing horizontal border line composed of dashes
-  console.log('-'.repeat(90));
+  process.stdout.write(`${'-'.repeat(90)}\n`);
+
   // Iterate across every single task record in our active list array
   tasks.forEach((task) => {
     // Convert the stored ISO string into a cleaner local readable format string
@@ -89,13 +91,13 @@ function printTaskGrid(tasks) {
       descriptionText = `${COLORS.bold}${COLORS.red}${descriptionText}${COLORS.reset}`;
     }
 
-    // Format and print each task row aligning column lengths systematically, accounting for hidden ANSI character overhead
-    console.log(
+    // Format and print each task row aligning column lengths systematically
+    process.stdout.write(
       `${task.id.toString().padEnd(5)} ` +
         `[${statusText.padEnd(20)}] ` +
         `${displayDueDate.padEnd(21)} ` +
         `${createdDate.padEnd(20)} ` +
-        `${descriptionText}`,
+        `${descriptionText}\n`,
     );
   });
 }
@@ -106,10 +108,7 @@ function printTaskGrid(tasks) {
 export async function addTask(description, dueDateArg) {
   // Check if the description parameter is missing or consists only of empty spaces
   if (!description || !description.trim()) {
-    // Print an error message directly to the standard error stream
-    console.error('Error: Givens said Task description cannot be empty.');
-    // Terminate the Node process early with a failure exit code of 1
-    process.exit(1);
+    throw new Error('Givens said Task description cannot be empty.');
   }
 
   let finalDueDate = null;
@@ -119,11 +118,8 @@ export async function addTask(description, dueDateArg) {
     const trimmedDate = dueDateArg.trim();
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
-    if (!dateRegex.test(trimmedDate) || isNaN(Date.parse(trimmedDate))) {
-      console.error(
-        'Error: Givens said Due date must match the format YYYY-MM-DD exactly.',
-      );
-      process.exit(1);
+    if (!dateRegex.test(trimmedDate) || Number.isNaN(Date.parse(trimmedDate))) {
+      throw new Error('Due date must match the format YYYY-MM-DD exactly.');
     }
     finalDueDate = trimmedDate;
   }
@@ -143,65 +139,64 @@ export async function addTask(description, dueDateArg) {
     dueDate: finalDueDate, // Assign standard calendar due dates or default null records
   };
 
-  // Push the newly constructed task object into the memory array
-  tasks.push(newTask);
+  // Immutably clone the array instead of using direct mutation (.push)
+  const updatedTasks = [...tasks, newTask];
   // Commit the updated task array back to the local database file
-  await saveTasks(tasks);
-  // Print a confirmation message to the user showing their new task's ID
-  console.log(`Givens Said your Task added successfully (ID: ${newTask.id})`);
+  await saveTasks(updatedTasks);
+
+  process.stdout.write(
+    `Givens Said your Task added successfully (ID: ${newTask.id})\n`,
+  );
+  return newTask;
 }
 
 /**
  * Deletes a task from the list by its ID.
  */
 export async function deleteTask(id) {
-  // Load the current array of tasks from the database file
   const tasks = await loadTasks();
-  // Count how many tasks exist before filtering out the target
   const initialLength = tasks.length;
+
   // Create a new array that excludes the task matching the target ID
   const filteredTasks = tasks.filter((t) => t.id !== id);
 
   // If the length of the array did not decrease, the target ID does not exist
   if (filteredTasks.length === initialLength) {
-    // Output a target-not-found error message to the user
-    console.error(`Error: Givens said Task with ID ${id} not found.`);
-    // Quit application execution with an error status code
-    process.exit(1);
+    throw new Error(`Task with ID ${id} not found.`);
   }
 
   // Write the filtered array back to the file to persist the deletion
   await saveTasks(filteredTasks);
-  // Confirm the successful deletion back to the command terminal
-  console.log(`Task ${id} deleted successfully.`);
+  process.stdout.write(`Task ${id} deleted successfully.\n`);
 }
 
 /**
  * Updates a task description text string by its ID.
  */
 export async function updateTask(id, newDescription) {
-  // Validate that the new description string contains characters
   if (!newDescription || !newDescription.trim()) {
-    console.error('Error: Givens said Task description cannot be empty.');
-    process.exit(1);
+    throw new Error('Task description cannot be empty.');
   }
 
   const tasks = await loadTasks();
-  // Attempt to locate the exact index position matching our task ID
-  const taskIndex = tasks.findIndex((t) => t.id === id);
+  const taskExists = tasks.some((t) => t.id === id);
 
-  // If findIndex yields a negative sequence flag, the item does not exist
-  if (taskIndex === -1) {
-    console.error(`Error: Givens said Task with ID ${id} not found.`);
-    process.exit(1);
+  if (!taskExists) {
+    throw new Error(`Task with ID ${id} not found.`);
   }
 
-  // Update properties on the target element inside the memory dataset array
-  tasks[taskIndex].description = newDescription.trim();
-  tasks[taskIndex].updatedAt = new Date().toISOString();
+  // Immutably transform the collection with .map to bypass object mutation errors
+  const updatedTasks = tasks.map((task) => {
+    if (task.id !== id) return task;
+    return {
+      ...task,
+      description: newDescription.trim(),
+      updatedAt: new Date().toISOString(),
+    };
+  });
 
-  await saveTasks(tasks);
-  console.log(`Task ${id} updated successfully.`);
+  await saveTasks(updatedTasks);
+  process.stdout.write(`Task ${id} updated successfully.\n`);
 }
 
 /**
@@ -209,53 +204,48 @@ export async function updateTask(id, newDescription) {
  */
 export async function updateTaskStatus(id, newStatus) {
   const tasks = await loadTasks();
-  const taskIndex = tasks.findIndex((t) => t.id === id);
+  const taskExists = tasks.some((t) => t.id === id);
 
-  if (taskIndex === -1) {
-    console.error(`Error: Givens said Task with ID ${id} not found.`);
-    process.exit(1);
+  if (!taskExists) {
+    throw new Error(`Task with ID ${id} not found.`);
   }
 
-  // Update status tracks along with standard timeline auditing indicators
-  tasks[taskIndex].status = newStatus;
-  tasks[taskIndex].updatedAt = new Date().toISOString();
+  // Immutably map updates onto a new array instance reference
+  const updatedTasks = tasks.map((task) => {
+    if (task.id !== id) return task;
+    return {
+      ...task,
+      status: newStatus,
+      updatedAt: new Date().toISOString(),
+    };
+  });
 
-  await saveTasks(tasks);
-  console.log(`Task ${id} marked as ${newStatus} successfully.`);
+  await saveTasks(updatedTasks);
+  process.stdout.write(`Task ${id} marked as ${newStatus} successfully.\n`);
 }
 
 /**
  * Filters and prints the task collection to the terminal.
  */
 export async function listTasks(statusFilter) {
-  // Read the active array of tasks out of the storage file
-  let tasks = await loadTasks();
+  const allTasks = await loadTasks();
+  let displayTasks = allTasks;
 
   // Check if the user specified a specific list status filter argument
   if (statusFilter) {
-    // If the filter argument is not one of our three supported statuses
     if (!['todo', 'in-progress', 'done'].includes(statusFilter)) {
-      // Print an invalid argument error message to the terminal standard error
-      console.error(
-        "Error: Invalid status. Use 'todo', 'in-progress', or 'done'.",
-      );
-      // Exit execution manually with an error notification code
-      process.exit(1);
+      throw new Error("Invalid status. Use 'todo', 'in-progress', or 'done'.");
     }
-    // Filter the task dataset to match only the requested status string
-    tasks = tasks.filter((t) => t.status === statusFilter);
+    displayTasks = allTasks.filter((t) => t.status === statusFilter);
   }
 
-  // Check if the resulting task collection to print is completely empty
-  if (tasks.length === 0) {
-    // Print a simple placeholder notice message to the console
-    console.log('No tasks found.');
-    // Exit out of the function early since there is nothing to iterate over
+  if (displayTasks.length === 0) {
+    process.stdout.write('No tasks found.\n');
     return;
   }
 
   // Pass active array components along to standardized grid formatting layout engines
-  printTaskGrid(tasks);
+  printTaskGrid(displayTasks);
 }
 
 /**
@@ -265,20 +255,18 @@ export async function searchTasks(keyword) {
   const tasks = await loadTasks();
   const searchNormalized = keyword.toLowerCase();
 
-  // Extract relevant task rows matching descriptions to structural user keywords
   const matchedTasks = tasks.filter((task) =>
     task.description.toLowerCase().includes(searchNormalized),
   );
 
   if (matchedTasks.length === 0) {
-    console.log(`No tasks found matching keyword: "${keyword}"`);
+    process.stdout.write(`No tasks found matching keyword: "${keyword}"\n`);
     return;
   }
 
-  console.log(
-    `${COLORS.cyan}Search Results for keyword: "${keyword}"${COLORS.reset}\n`,
+  process.stdout.write(
+    `${COLORS.cyan}Search Results for keyword: "${keyword}"${COLORS.reset}\n\n`,
   );
-  // Route matched arrays to structural data grid printers safely
   printTaskGrid(matchedTasks);
 }
 
@@ -290,8 +278,8 @@ export async function printStats() {
   const total = tasks.length;
 
   if (total === 0) {
-    console.log(
-      'No tracking metrics accessible. Database collection array is empty.',
+    process.stdout.write(
+      'No tracking metrics accessible. Database collection array is empty.\n',
     );
     return;
   }
@@ -309,25 +297,26 @@ export async function printStats() {
   // Compute precise programmatic percentage performance statistics ratios safely
   const completeRatio = ((doneCount / total) * 100).toFixed(1);
 
-  console.log(
-    `\n${COLORS.bold}${COLORS.cyan}📊 TASK ANALYTICS STATS DASHBOARD${COLORS.reset}`,
+  process.stdout.write(
+    `\n${COLORS.bold}${COLORS.cyan}📊 TASK ANALYTICS STATS DASHBOARD${COLORS.reset}\n`,
   );
-  console.log('='.repeat(45));
-  console.log(`  Absolute Records Total : ${total}`);
-  console.log(
-    `  Pending Status (Todo)  : ${COLORS.red}${todoCount}${COLORS.reset}`,
+
+  process.stdout.write(`${'='.repeat(45)}\n`);
+  process.stdout.write(`  Absolute Records Total : ${total}\n`);
+  process.stdout.write(
+    `  Pending Status (Todo)  : ${COLORS.red}${todoCount}${COLORS.reset}\n`,
   );
-  console.log(
-    `  Running (In-Progress)  : ${COLORS.yellow}${inProgressCount}${COLORS.reset}`,
+  process.stdout.write(
+    `  Running (In-Progress)  : ${COLORS.yellow}${inProgressCount}${COLORS.reset}\n`,
   );
-  console.log(
-    `  Finalized (Done)       : ${COLORS.green}${doneCount}${COLORS.reset}`,
+  process.stdout.write(
+    `  Finalized (Done)       : ${COLORS.green}${doneCount}${COLORS.reset}\n`,
   );
-  console.log(
-    `  Overdue Deadline Items : ${COLORS.bold}${COLORS.red}${overdueCount}${COLORS.reset}`,
+  process.stdout.write(
+    `  Overdue Deadline Items : ${COLORS.bold}${COLORS.red}${overdueCount}${COLORS.reset}\n`,
   );
-  console.log('-'.repeat(45));
-  console.log(
-    `  Execution Progress Ratio: ${COLORS.bold}${COLORS.magenta}${completeRatio}% Complete${COLORS.reset}\n`,
+  process.stdout.write(`${'-'.repeat(45)}\n`);
+  process.stdout.write(
+    `  Execution Progress Ratio: ${COLORS.bold}${COLORS.magenta}${completeRatio}% Complete${COLORS.reset}\n\n`,
   );
 }

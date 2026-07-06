@@ -1,7 +1,7 @@
 // Import the core filesystem module from Node.js using promises for cleaner asynchronous code
-import fs from 'fs/promises';
+import fs from 'node:fs/promises';
 // Import Node's path utility to handle cross-platform file paths seamlessly (Mac, Windows, Linux)
-import path from 'path';
+import path from 'node:path';
 
 // Combine the current working directory path with the target database name to create an absolute path
 const FILE_PATH = path.join(
@@ -16,9 +16,14 @@ async function ensureFileExists() {
   try {
     // Attempt to access the file; if this succeeds, the file exists and we do nothing
     await fs.access(FILE_PATH);
-  } catch {
-    // If an error is thrown (file is missing), write a new file containing an empty JSON array string
-    await fs.writeFile(FILE_PATH, JSON.stringify([], null, 2), 'utf-8');
+  } catch (error) {
+    // Only generate a new file if the error indicates it does not exist (ENOENT)
+    if (error.code === 'ENOENT') {
+      await fs.writeFile(FILE_PATH, JSON.stringify([], null, 2), 'utf-8');
+    } else {
+      // Re-throw any other critical system permission errors to prevent silent data loss
+      throw error;
+    }
   }
 }
 
