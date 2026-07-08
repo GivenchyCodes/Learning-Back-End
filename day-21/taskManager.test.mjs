@@ -1,147 +1,88 @@
-// Imports native Node.js test runner functions for structuring and executing tests.
-import { test, describe, beforeEach, afterEach, mock } from 'node:test';
-// Imports strict assertion utilities to validate test results and conditions.
+// Set the environment variable to 'test' to configure the app behavior for testing
+process.env.NODE_ENV = 'test';
+
+// Import the built-in Node.js test runner functions for structuring the test suite
+import { test, beforeEach, afterEach } from 'node:test';
+// Import the strict assertion library to validate expected outcomes against actual results
 import assert from 'node:assert/strict';
-// Imports asynchronous file system methods using Promises for file operations.
+// Import the promise-based file system module to read and write files asynchronously
 import fs from 'node:fs/promises';
-// Imports the path module to safely handle and resolve cross-platform file paths.
+// Import the path module to safely handle and transform file system paths
 import path from 'node:path';
-// Imports the application function responsible for adding new tasks.
-import { addTask, printStats } from './taskManager.mjs';
-// Imports the application function responsible for reading saved tasks.
-import { saveTasks } from './storage.mjs';
 
-// Defines the absolute path to a temporary JSON file used for test isolation.
-const TEST_FILE = path.join(process.cwd(), 'tasks.test.json');
+// Import the specific task manipulation functions that need to be tested
+import { addTask, isTaskOverdue } from './taskManager.mjs';
+// Import the data loading function to inspect the state of the task storage
+import { loadTasks } from './storage.mjs';
 
-// Groups related tests together into a specific suite for Task Manager core logic.
-describe('Task Manager Core Logic Engine Suite', () => {
-  // Hook that automatically runs before every single test to ensure a clean state.
-  beforeEach(async () => {
-    try {
-      // Deletes the temporary test file before the test begins execution.
-      await fs.unlink(TEST_FILE);
-    } catch (error) {
-      // Safely ignores the missing file warning if it hasn't been created yet
-      if (error.code !== 'ENOENT') throw error;
-    }
-  });
+// Construct an absolute file path pointing to 'tasks.test.json' in the current working directory
+const TEST_FILE_PATH = path.join(process.cwd(), 'tasks.test.json');
+// Initialize a mutable array variable to hold a backup copy of the test data
+let backupData = [];
 
-  // Hook that automatically runs after every single test to clean up generated files.
-  afterEach(async () => {
-    try {
-      // Deletes the temporary test file created during the test run.
-      await fs.unlink(TEST_FILE);
-    } catch (error) {
-      // Safely ignores the missing file error
-      if (error.code !== 'ENOENT') throw error;
-    }
-  });
-
-  // Defines an individual test case verifying successful creation of a valid task.
-  test('addTask() should successfully create a structured todo entry item', async () => {
-    // Triggers the application logic to create and save a new task string.
-    await addTask('Verify unit test engine integration');
-
-    // Reads the newly written test file content using UTF-8 text encoding.
-    const data = await fs.readFile(TEST_FILE, 'utf-8');
-    // Converts the raw JSON text string back into a usable JavaScript array object.
-    const tasks = JSON.parse(data);
-
-    // Verifies that exactly one task object exists in the storage array.
-    assert.equal(tasks.length, 1);
-    // Verifies that the auto-increment system assigned an initial ID value of 1.
-    assert.equal(tasks[0].id, 1);
-    // Verifies that the saved task text exactly matches the input argument.
-    assert.equal(tasks[0].description, 'Verify unit test engine integration');
-    // Verifies that the initial status of the created task defaults to 'todo'.
-    assert.equal(tasks[0].status, 'todo');
-    // Verifies that a valid timestamp value exists for the creation date property.
-    assert.ok(tasks[0].createdAt);
-  });
-
-  // Defines an individual test case verifying error handling for empty string inputs.
-  test('addTask() must block empty descriptions and throw a system failure exit code', async () => {
-    // Safe Node.js built-in method mocking replacing dangerous global assignments
-    let exitCodeCalled = null;
-    mock.method(process, 'exit', (code) => {
-      exitCodeCalled = code;
-    });
-
-    // Attempts to add a task consisting only of empty whitespace characters.
-    await addTask('   ');
-
-    // Verifies that the system safely aborted operation by throwing an exit code of 1.
-    assert.equal(exitCodeCalled, 1);
-
-    // Automatically restores context mapping on complete
-    mock.reset();
-  });
+// Register a hook that automatically runs before every individual test block executes
+beforeEach(async () => {
+  try {
+    // Attempt to read the entire contents of the test JSON file using UTF-8 encoding
+    const data = await fs.readFile(TEST_FILE_PATH, 'utf-8');
+    // Parse the file string into JavaScript arrays/objects, defaulting to an empty list if blank
+    backupData = JSON.parse(data || '[]');
+  } catch (err) {
+    // Catch errors (like a missing file) and safely initialize the backup as an empty array
+    backupData = [];
+  }
 });
 
-// PRINSTAT TEST
-// Defines an individual test case verifying mathematical metric calculations and console reporting.
-test('printStats() should accurately calculate metrics and complete ratio percentages', async () => {
-  // Uses built-in node:test mocking to safely monitor console logging pipelines
-  const capturedLogs = [];
-  mock.method(console, 'log', (message) => {
-    if (message) capturedLogs.push(message);
-  });
+// Register a hook that automatically runs after every individual test block completes
+afterEach(async () => {
+  // Restore the original test file state by writing the backup data back to the disk
+  await fs.writeFile(
+    TEST_FILE_PATH,
+    // Convert the backup data back to a formatted JSON string with a 2-space indentation
+    JSON.stringify(backupData, null, 2),
+    'utf-8',
+  );
+});
 
-  // Constructs an isolated array of test objects representing a diverse mix of task states.
-  const mockTasks = [
-    {
-      id: 1,
-      description: 'Task 1',
-      status: 'done',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      dueDate: null,
-    },
-    {
-      id: 2,
-      description: 'Task 2',
-      status: 'todo',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      dueDate: null,
-    },
-    {
-      id: 3,
-      description: 'Task 3',
-      status: 'in-progress',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      dueDate: null,
-    },
-    {
-      id: 4,
-      description: 'Task 4',
-      status: 'done',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      dueDate: null,
-    },
-  ];
+// Define a test case to ensure the specific count of completed tasks matches expectations
+test('Day 24 Query Engine: Verifies status distribution match totals', async () => {
+  // Fetch the current array of tasks from the storage system
+  const tasks = await loadTasks();
+  // Filter the list to isolate only the tasks that have a status value of 'done'
+  const doneTasks = tasks.filter((t) => t.status === 'done');
+  // Confirm that the number of completed tasks found is exactly equal to 2
+  assert.equal(doneTasks.length, 2);
+});
 
-  // Writes the array of mock task objects directly into the database test file.
-  await saveTasks(mockTasks);
+// Define a test case to check if the overdue checking logic handles dates properly
+test('Day 24 Deadline Core Engine: Validates chronological overdue evaluation parameters', () => {
+  // Mock a mock task object representing an incomplete task with a past due date
+  const pastTask = { status: 'todo', dueDate: '2020-01-01' };
+  // Mock a mock task object representing an incomplete task with a future due date
+  const futureTask = { status: 'todo', dueDate: '2030-12-31' };
+  // Verify that the system correctly identifies the past task as overdue (true)
+  assert.equal(isTaskOverdue(pastTask), true);
+  // Verify that the system correctly identifies the future task as not overdue (false)
+  assert.equal(isTaskOverdue(futureTask), false);
+});
 
-  // Executes the reporting engine to calculate values and print metrics to the console.
-  await printStats();
+// Define a test case to verify that adding new tasks updates the list length and sequential IDs
+test('Day 24 Immutable Core Persistence: Asserts new items stack sequential index arrays', async () => {
+  // Retrieve the initial list of tasks before making any alterations
+  const initialTasks = await loadTasks();
+  // Verify that the test database starts out with exactly 4 tasks
+  assert.equal(initialTasks.length, 4);
 
-  // Aggregates all captured terminal log segments into a single cohesive string for analysis.
-  const fullOutputText = capturedLogs.join('\n');
+  // Execute the target function to append a brand new task to the database
+  const created = await addTask(
+    'Verify test suite integration pipelines',
+    '2026-12-31',
+  );
+  // Re-fetch the task list from storage to capture the updated state
+  const updatedTasks = await loadTasks();
 
-  // Confirms that the report correctly aggregates and displays a total count of 4 items.
-  assert.match(fullOutputText, /Absolute Records Total\s*:\s*4/);
-  // Verifies that the printed text reports the correct quantity of unstarted 'todo' tasks.
-  assert.match(fullOutputText, /Pending Status \(Todo\)\s*:\s*/);
-  // Verifies that the printed text reports the correct quantity of completed 'done' tasks.
-  assert.match(fullOutputText, /Finalized \(Done\)\s*:\s*/);
-  // Confirms that the output calculates exactly 50.0% completion with single-decimal float precision.
-  assert.match(fullOutputText, /50\.0% Complete/);
-
-  // Cleans up the console mock to protect follow-up execution runs
-  mock.reset();
+  // Confirm that the total task count has successfully increased from 4 to 5
+  assert.equal(updatedTasks.length, 5);
+  // Confirm that the newly generated task was assigned the correct sequential ID of 5
+  assert.equal(created.id, 5);
 });

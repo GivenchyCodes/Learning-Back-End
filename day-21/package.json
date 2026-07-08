@@ -2,8 +2,15 @@
   "name": "task-cli",
   "version": "1.0.0",
   "type": "module",
+  "description": "A hybrid zero-dependency asynchronous Task CLI and Web API Server",
+  "main": "taskManager.mjs",
   "bin": {
     "task-cli": "./task-cli.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "NODE_ENV=test node taskManager.test.mjs",
+    "test:watch": "NODE_ENV=test node --watch taskManager.test.mjs"
   },
   "devDependencies": {
     "@eslint/compat": "^2.1.0",
