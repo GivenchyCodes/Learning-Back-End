@@ -1,0 +1,20 @@
+{
+  "name": "day23-server",
+  "version": "1.0.0",
+  "description": "Welcome to Day 23! Today, you shift from building terminal tools (`task-cli`) to writing persistent programs that live on the internet using modern **ES Modules (`import/export`)**.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "GivenchiCodes",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1"
+  }
+}
